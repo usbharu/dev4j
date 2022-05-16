@@ -1,0 +1,42 @@
+apply plugin: "java-library"
+
+
+allprojects {
+    group "io.github.usbharu"
+    version "0.0.1"
+
+    repositories {
+        mavenCentral()
+    }
+
+}
+
+subprojects {
+    apply plugin: "java"
+
+    test {
+        useJUnitPlatform()
+    }
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+
+    }
+
+//    sourceCompatibility = 1.8;
+//    targetCompatibility = 1.8;
+    java {
+        modularity.inferModulePath = true
+    }
+
+
+}
+
+dependencies {
+    api project(":dev4j-api")
+    implementation project(":dev4j-core")
+}
+
+jar {
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+}

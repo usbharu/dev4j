@@ -1,0 +1,18 @@
+dependencies {
+    annotationProcessor 'com.google.auto.service:auto-service:1.0.1'
+    compileOnly 'com.google.auto.service:auto-service:1.0.1'
+    implementation project(":dev4j-api")
+
+    compileJava {
+        doFirst {
+            options.compilerArgs = ["--module-path", classpath.asPath,
+                                    "--add-modules", "com.google.auto.service",
+                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
+                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
+                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"]
+            classpath = files()
+        }
+    }
+}
