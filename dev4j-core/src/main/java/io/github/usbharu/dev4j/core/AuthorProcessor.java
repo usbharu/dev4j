@@ -59,9 +59,8 @@ public class AuthorProcessor extends AbstractProcessor {
         System.out.println("className = " + className);
         ListBuffer<JCTree.JCStatement> methodBlockStatements = new ListBuffer<>();
         System.out.println("names = " + names);
-        JCReturn jcReturn = maker.Return(maker.Ident(names.fromString("String")));
-        JCBlock block = maker.Block(0, methodBlockStatements.toList());
-        methodBlockStatements.add(jcReturn);
+        JCReturn jcReturn = maker.Return(maker.Literal(element.getAnnotation(Author.class).value()));
+        JCBlock block = maker.Block(0, List.of(jcReturn));
         classDecl.defs = classDecl.defs.prepend(
             maker.MethodDef(maker.Modifiers(Flags.PUBLIC),
                 names.fromString("getAuthor"),
