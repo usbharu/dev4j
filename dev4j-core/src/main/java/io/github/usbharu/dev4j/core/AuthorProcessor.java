@@ -69,6 +69,7 @@ public class AuthorProcessor extends AbstractProcessor {
           md.body.stats =
               List.of(parserFactory.newParser("return \"hello\";", false, false, false)
                   .parseStatement());
+          System.out.println("md.body.stats = " + md.body.stats);
         }
       }
       return super.visitMethod(node, unused);

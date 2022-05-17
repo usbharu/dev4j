@@ -7,6 +7,11 @@ import io.github.usbharu.dev4j.api.Author;
 public class AaTest extends AbstractTool {
 
   @Override
+  public String getAuthor() {
+    return "test";
+  }
+
+  @Override
   public Object[] use(Object... arg) {
     return new Object[0];
   }
