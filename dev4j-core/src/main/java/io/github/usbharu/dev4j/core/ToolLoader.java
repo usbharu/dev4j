@@ -8,7 +8,11 @@ public class ToolLoader {
 
   private static final List<Tool> tools = new ArrayList<>();
 
-  public void addTool(Tool tool) {
+  public static void addTool(Tool tool) {
     tools.add(tool);
+  }
+
+  public static Object use(Tool tool,String[] args){
+    return tool.pickup(args);
   }
 }

@@ -6,7 +6,7 @@ public interface Tool {
 
   String getAuthor();
 
-  Object[] use(Object... arg);
+  Object[] pickup(String[] args);
 
   List<Class<?>> argument();
 

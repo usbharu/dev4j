@@ -3,7 +3,15 @@ dependencies {
     compileOnly 'com.google.auto.service:auto-service:1.0.1'
     implementation project(":dev4j-api")
 
-    compileJava {
+    if (targetCompatibility.toString().startsWith("1."))
+        implementation files("${System.properties['java.home']}/../lib/tools.jar")
+
+
+}
+compileJava {
+    if (!targetCompatibility.startsWith("1.")) {
+
+
         doFirst {
             options.compilerArgs = ["--module-path", classpath.asPath,
                                     "--add-modules", "com.google.auto.service",
