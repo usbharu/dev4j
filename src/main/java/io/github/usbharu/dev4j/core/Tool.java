@@ -1,4 +1,4 @@
-package io.github.usbharu.dev4j.api;
+package io.github.usbharu.dev4j.core;
 
 import java.util.List;
 

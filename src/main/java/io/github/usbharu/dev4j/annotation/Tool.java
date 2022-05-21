@@ -1,13 +1,13 @@
-package io.github.usbharu.dev4j.api;
+package io.github.usbharu.dev4j.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.CLASS)
-public @interface Author {
+public @interface Tool {
 
-  String value() default "unknown";
+  String[] value();
 }

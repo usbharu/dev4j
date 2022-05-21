@@ -1,4 +1,4 @@
-package io.github.usbharu.dev4j.core;
+package io.github.usbharu.dev4j.annotation;
 
 import com.google.auto.service.AutoService;
 import com.sun.source.util.Trees;
@@ -15,7 +15,6 @@ import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Names;
-import io.github.usbharu.dev4j.api.Author;
 import java.util.ArrayList;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;

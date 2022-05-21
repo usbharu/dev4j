@@ -1,4 +1,3 @@
 rootProject.name = 'dev4j'
-include 'dev4j-core'
-include 'dev4j-api'
-include "dev4j-aa"
+include 'dev4j-aa'
+
