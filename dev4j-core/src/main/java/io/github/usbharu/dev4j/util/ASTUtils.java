@@ -71,14 +71,14 @@ public class ASTUtils {
     return jcMethodDecl;
   }
 
-  public static JCMethodDecl makeLiteralReturnMethod(TreeMaker maker,Names names,JCClassDecl classDecl,String sym,Object literal){
+  public static JCMethodDecl makeLiteralReturnMethod(TreeMaker maker,Names names,JCClassDecl classDecl,String sym,String type,Object literal){
     JCMethodDecl jcMethodDecl = searchMethod(classDecl, sym);
     if (jcMethodDecl == null) {
       return makeNoParamMethod(maker, maker.Modifiers(Flags.PUBLIC),
           names.fromString(symbolToName(sym)),
-          maker.Ident(names.fromString("String")), makeLiteralReturnBlock(maker, literal));
+          maker.Ident(names.fromString(type)), makeLiteralReturnBlock(maker, literal));
     }
-    jcMethodDecl.restype= maker.Ident(names.fromString("String"));
+    jcMethodDecl.restype= maker.Ident(names.fromString(type));
     jcMethodDecl.body=makeLiteralReturnBlock(maker, literal);
     return jcMethodDecl;
   }
