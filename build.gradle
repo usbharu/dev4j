@@ -2,6 +2,8 @@ apply plugin: "java-library"
 
 
 allprojects {
+
+
     group "io.github.usbharu"
     version "0.0.1"
 
@@ -12,7 +14,8 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: "java"
+
+    apply plugin: "java-library"
 
     test {
         useJUnitPlatform()
@@ -21,22 +24,20 @@ subprojects {
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
+
     }
 
-//    sourceCompatibility = 1.8;
-//    targetCompatibility = 1.8;
+
     java {
         modularity.inferModulePath = true
     }
 
 
-}
+//jar {
+//
+//    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+//}
 
-dependencies {
-    api project(":dev4j-api")
-    implementation project(":dev4j-core")
-}
 
-jar {
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+
 }

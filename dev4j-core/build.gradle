@@ -1,9 +1,16 @@
-dependencies {
-    annotationProcessor 'com.google.auto.service:auto-service:1.0.1'
-    compileOnly 'com.google.auto.service:auto-service:1.0.1'
-    implementation project(":dev4j-api")
 
-    compileJava {
+dependencies {
+            annotationProcessor 'com.google.auto.service:auto-service:1.0.1'
+        compileOnly 'com.google.auto.service:auto-service:1.0.1'
+
+        if (targetCompatibility.toString().startsWith("1."))
+            implementation files("${System.properties['java.home']}/../lib/tools.jar")
+}
+
+compileJava {
+    if (!targetCompatibility.startsWith("1.")) {
+
+
         doFirst {
             options.compilerArgs = ["--module-path", classpath.asPath,
                                     "--add-modules", "com.google.auto.service",
@@ -11,6 +18,8 @@ dependencies {
                                     "--add-exports", "jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
                                     "--add-exports", "jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
                                     "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
+                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
                                     "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"]
             classpath = files()
         }

@@ -1,10 +1,16 @@
-package io.github.usbharu.dev4j.core;
+package io.github.usbharu.dev4j.api;
 
-import io.github.usbharu.dev4j.api.Tool;
+
+import io.github.usbharu.dev4j.core.Tool;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractTool implements Tool {
+
+  @Override
+  public String getAuthor() {
+    return "";
+  }
 
   @Override
   public List<Class<?>> argument() {
