@@ -8,6 +8,8 @@ import com.sun.tools.javac.tree.JCTree.JCExpression;
 import com.sun.tools.javac.tree.JCTree.JCMethodDecl;
 import com.sun.tools.javac.tree.JCTree.JCModifiers;
 import com.sun.tools.javac.tree.JCTree.JCReturn;
+import com.sun.tools.javac.tree.JCTree.JCTypeCast;
+import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Name;
@@ -96,5 +98,13 @@ public class ASTUtils {
 
   public static String symbolToName(String symbol){
     return symbol.substring(0, symbol.indexOf("("));
+  }
+
+  public static JCBlock castBlock(TreeMaker maker,Names names,JCTree tree,JCExpression expression){
+    JCTypeCast jcTypeCast = maker.TypeCast(tree, expression);
+    JCVariableDecl castTest =
+        maker.VarDef(maker.Modifiers(Flags.PUBLIC), names.fromString("castTest"), expression,
+            jcTypeCast);
+    return maker.Block(0, List.of(castTest));
   }
 }

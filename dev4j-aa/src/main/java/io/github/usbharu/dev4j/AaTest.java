@@ -1,9 +1,11 @@
 package io.github.usbharu.dev4j;
 
 import io.github.usbharu.dev4j.annotation.Author;
+import io.github.usbharu.dev4j.annotation.Tool;
 import io.github.usbharu.dev4j.api.AbstractTool;
 
-@Author
+@Tool()
+@Author("usbharu")
 public class AaTest extends AbstractTool {
 
   //test
@@ -14,10 +16,13 @@ public class AaTest extends AbstractTool {
 
   @Override
   public Object[] pickup(String[] arg) {
-    return new Object[0];
+    String s = arg[0];
+    int i = Integer.parseInt(arg[1]);
+    boolean b = Boolean.parseBoolean(arg[2]);
+    return use(s, i, b);
   }
 
-  public Object[] use(Object... arg) {
-    return new Object[0];
+  public Object[] use(String p1, int p2, boolean p3) {
+    return new Object[] {p1, p2, p3};
   }
 }
