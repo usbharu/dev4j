@@ -1,4 +1,4 @@
 dependencies {
-    implementation project(":dev4j-api")
+    compileOnly project(":dev4j-core")
     annotationProcessor project(":dev4j-core")
 }

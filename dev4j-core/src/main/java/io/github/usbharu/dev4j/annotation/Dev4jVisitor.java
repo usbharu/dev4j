@@ -22,8 +22,9 @@ public class Dev4jVisitor extends TreeScanner<Void,Void> {
   public Void visitMethod(MethodTree methodTree, Void unused) {
     if (methodTree instanceof JCMethodDecl) {
       JCMethodDecl method = (JCMethodDecl) methodTree;
-      if (method.name.toString().equals("getAuthor")) {
-        method.body = maker.Block(0, List.nil());
+      System.out.println("method.sym = " + method.sym);
+      if (method.sym.toString().equals("getAuthor()")) {
+//        method.body = maker.Block(0, List.nil());
       }else if (method.name.toString().equals("")){
 
       }

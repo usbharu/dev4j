@@ -1,9 +1,9 @@
 package io.github.usbharu.dev4j;
 
+import io.github.usbharu.dev4j.annotation.Author;
 import io.github.usbharu.dev4j.api.AbstractTool;
-import io.github.usbharu.dev4j.api.Author;
 
-@Author("usbharu")
+@Author
 public class AaTest extends AbstractTool {
 
   //test

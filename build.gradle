@@ -1,32 +1,36 @@
 apply plugin: "java-library"
 
 
-group "io.github.usbharu"
-version "0.0.1"
+allprojects {
 
-repositories {
-    mavenCentral()
+
+    group "io.github.usbharu"
+    version "0.0.1"
+
+    repositories {
+        mavenCentral()
+    }
+
 }
 
+subprojects {
 
-test {
-    useJUnitPlatform()
-}
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    apply plugin: "java-library"
 
-    annotationProcessor 'com.google.auto.service:auto-service:1.0.1'
-    compileOnly 'com.google.auto.service:auto-service:1.0.1'
-
-    if (targetCompatibility.toString().startsWith("1."))
-        implementation files("${System.properties['java.home']}/../lib/tools.jar")
-}
+    test {
+        useJUnitPlatform()
+    }
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
 
-java {
-    modularity.inferModulePath = true
-}
+    }
+
+
+    java {
+        modularity.inferModulePath = true
+    }
 
 
 //jar {
@@ -34,21 +38,6 @@ java {
 //    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 //}
 
-compileJava {
-    if (!targetCompatibility.startsWith("1.")) {
 
 
-        doFirst {
-            options.compilerArgs = ["--module-path", classpath.asPath,
-                                    "--add-modules", "com.google.auto.service",
-                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
-                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
-                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
-                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
-                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
-                                    "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"]
-            classpath = files()
-        }
-    }
 }

@@ -26,8 +26,8 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
-@AutoService(Processor.class)
-@SupportedAnnotationTypes("io.github.usbharu.dev4j.api.Author")
+//@AutoService(Processor.class)
+//@SupportedAnnotationTypes("io.github.usbharu.dev4j.annotation.Author")
 public class AuthorProcessor extends AbstractProcessor {
 
   private Trees trees;
@@ -39,6 +39,7 @@ public class AuthorProcessor extends AbstractProcessor {
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
+    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     super.init(processingEnv);
     this.elementUtils = ((JavacElements) processingEnv.getElementUtils());
     context = ((JavacProcessingEnvironment) processingEnv).getContext();
