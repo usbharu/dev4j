@@ -1,0 +1,12 @@
+dependencies {
+    compileOnly project(":dtf-core")
+    annotationProcessor project(":dtf-core")
+}
+
+compileJava{
+    doFirst{
+        options.compilerArgs = [
+                "-g","-verbose"
+        ]
+    }
+}
