@@ -2,3 +2,11 @@ dependencies {
     compileOnly project(":dev4j-core")
     annotationProcessor project(":dev4j-core")
 }
+
+compileJava{
+    doFirst{
+        options.compilerArgs = [
+                "-g","-verbose"
+        ]
+    }
+}

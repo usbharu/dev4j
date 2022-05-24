@@ -5,6 +5,7 @@ import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCBlock;
 import com.sun.tools.javac.tree.JCTree.JCClassDecl;
 import com.sun.tools.javac.tree.JCTree.JCExpression;
+import com.sun.tools.javac.tree.JCTree.JCExpressionStatement;
 import com.sun.tools.javac.tree.JCTree.JCMethodDecl;
 import com.sun.tools.javac.tree.JCTree.JCModifiers;
 import com.sun.tools.javac.tree.JCTree.JCReturn;
@@ -62,7 +63,7 @@ public class ASTUtils {
     JCMethodDecl jcMethodDecl = searchMethod(classDecl, name);
     if (jcMethodDecl == null) {
       jcMethodDecl =
-          makeNoParamMethod(maker, names, maker.Modifiers(Flags.PUBLIC), name, "void",
+          makeNoParamMethod(maker, names, maker.Modifiers(Flags.PUBLIC), symbolToName(name), "void",
               makeEmptyBlock(maker));
       classDecl.defs.prepend(
           jcMethodDecl);
@@ -106,5 +107,16 @@ public class ASTUtils {
         maker.VarDef(maker.Modifiers(Flags.PUBLIC), names.fromString("castTest"), expression,
             jcTypeCast);
     return maker.Block(0, List.of(castTest));
+  }
+
+//  public static JCBlock stringParsePrimitiveBlock(TreeMaker maker,Names names,)
+
+  public static JCClassDecl injectMethod(JCClassDecl classDecl,JCMethodDecl methodDecl){
+    classDecl.defs = classDecl.defs.prepend(methodDecl);
+    return classDecl;
+  }
+
+  public static JCExpressionStatement exec(TreeMaker maker,Names names,String name,List<JCExpression> args){
+    return maker.Exec(maker.Apply(List.nil(), maker.Ident(names.fromString(name)), args));
   }
 }
