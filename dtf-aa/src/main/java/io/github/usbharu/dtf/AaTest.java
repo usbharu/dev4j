@@ -14,9 +14,6 @@ public class AaTest extends AbstractTool {
     return super.getAuthor();
   }
 
-  @Override
-  public Object[] pickup(String[] arg) {
-  }
 
   public void test(String[] arg){
     System.out.println("arg = " + arg);

@@ -13,6 +13,11 @@ public abstract class AbstractTool implements Tool {
   }
 
   @Override
+  public Object[] pickup(String[] args) {
+    return new Object[0];
+  }
+
+  @Override
   public List<Class<?>> argument() {
     return new ArrayList<>();
   }

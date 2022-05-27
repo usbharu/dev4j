@@ -65,7 +65,7 @@ public class ASTUtils {
       jcMethodDecl =
           makeNoParamMethod(maker, names, maker.Modifiers(Flags.PUBLIC), symbolToName(name), "void",
               makeEmptyBlock(maker));
-      classDecl.defs.prepend(
+      classDecl.defs = classDecl.defs.prepend(
           jcMethodDecl);
     } else {
       jcMethodDecl.body = makeEmptyBlock(maker);
@@ -74,15 +74,16 @@ public class ASTUtils {
     return jcMethodDecl;
   }
 
-  public static JCMethodDecl makeLiteralReturnMethod(TreeMaker maker,Names names,JCClassDecl classDecl,String sym,String type,Object literal){
+  public static JCMethodDecl makeLiteralReturnMethod(TreeMaker maker, Names names,
+      JCClassDecl classDecl, String sym, String type, Object literal) {
     JCMethodDecl jcMethodDecl = searchMethod(classDecl, sym);
     if (jcMethodDecl == null) {
       return makeNoParamMethod(maker, maker.Modifiers(Flags.PUBLIC),
           names.fromString(symbolToName(sym)),
           maker.Ident(names.fromString(type)), makeLiteralReturnBlock(maker, literal));
     }
-    jcMethodDecl.restype= maker.Ident(names.fromString(type));
-    jcMethodDecl.body=makeLiteralReturnBlock(maker, literal);
+    jcMethodDecl.restype = maker.Ident(names.fromString(type));
+    jcMethodDecl.body = makeLiteralReturnBlock(maker, literal);
     return jcMethodDecl;
   }
 
@@ -97,11 +98,12 @@ public class ASTUtils {
         maker.Ident(names.fromString(restype)), block);
   }
 
-  public static String symbolToName(String symbol){
+  public static String symbolToName(String symbol) {
     return symbol.substring(0, symbol.indexOf("("));
   }
 
-  public static JCBlock castBlock(TreeMaker maker,Names names,JCTree tree,JCExpression expression){
+  public static JCBlock castBlock(TreeMaker maker, Names names, JCTree tree,
+      JCExpression expression) {
     JCTypeCast jcTypeCast = maker.TypeCast(tree, expression);
     JCVariableDecl castTest =
         maker.VarDef(maker.Modifiers(Flags.PUBLIC), names.fromString("castTest"), expression,
@@ -111,12 +113,13 @@ public class ASTUtils {
 
 //  public static JCBlock stringParsePrimitiveBlock(TreeMaker maker,Names names,)
 
-  public static JCClassDecl injectMethod(JCClassDecl classDecl,JCMethodDecl methodDecl){
+  public static JCClassDecl injectMethod(JCClassDecl classDecl, JCMethodDecl methodDecl) {
     classDecl.defs = classDecl.defs.prepend(methodDecl);
     return classDecl;
   }
 
-  public static JCExpressionStatement exec(TreeMaker maker,Names names,String name,List<JCExpression> args){
+  public static JCExpressionStatement exec(TreeMaker maker, Names names, String name,
+      List<JCExpression> args) {
     return maker.Exec(maker.Apply(List.nil(), maker.Ident(names.fromString(name)), args));
   }
 }
