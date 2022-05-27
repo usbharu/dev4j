@@ -1,5 +1,5 @@
 apply plugin: "java-library"
-
+apply plugin: "application"
 
 allprojects {
 
@@ -33,11 +33,11 @@ subprojects {
     }
 
 
-//jar {
-//
-//    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-//}
-
-
-
+}
+dependencies {
+    implementation project(":dtf-core")
+    runtimeOnly project(":dtf-aa")
+}
+application {
+    mainClassName = "io.github.usbharu.dtf.cui.Main"
 }

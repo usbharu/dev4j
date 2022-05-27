@@ -5,13 +5,15 @@ import java.util.List;
 
 public class ToolLoader {
 
-  private static final List<Tool> tools = new ArrayList<>();
+  public static final List<Tool> tools = new ArrayList<>();
 
-  public static void addTool(Tool tool) {
-    tools.add(tool);
+  public static boolean addTool(Tool tool) {
+    System.out.println("addTool: " + tool.getClass().getName());
+    return tools.add(tool);
+
   }
 
-  public static Object use(Tool tool,String[] args){
+  public static Object use(Tool tool, String[] args) {
     return tool.pickup(args);
   }
 }
