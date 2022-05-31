@@ -34,6 +34,17 @@ subprojects {
 
 
 }
+
+jar {
+
+
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    manifest {
+        attributes "Main-Class": "io.github.usbharu.dtf.cui.Main"
+    }
+}
+
 dependencies {
     implementation project(":dtf-core")
     runtimeOnly project(":dtf-aa")

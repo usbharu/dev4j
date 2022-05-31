@@ -16,9 +16,9 @@ public class Main {
         Class.forName(classInfo.getName());
         if (classInfo.getName().equals("io.github.usbharu.dtf.DuplicateLineRemover")) {
 //          System.out.println("classInfo = " + classInfo);
-          ToolLoader.use(ToolLoader.TOOLS.get(ToolLoader.TOOLS.size() - 1),
-              new String[] {"D:\\Documents\\test\\docker-compose.yml",
-                  "D:\\Documents\\test\\docker-compose.yml.save"});
+//          ToolLoader.use(ToolLoader.TOOLS.get(ToolLoader.TOOLS.size() - 1),
+//              new String[] {"D:\\Documents\\test\\docker-compose.yml",
+//                  "D:\\Documents\\test\\docker-compose.yml.save"});
         }
       }
     } catch (IOException e) {
