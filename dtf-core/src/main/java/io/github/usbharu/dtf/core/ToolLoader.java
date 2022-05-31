@@ -1,15 +1,21 @@
 package io.github.usbharu.dtf.core;
 
-import java.util.ArrayList;
+import io.github.usbharu.dtf.util.UniqueArrayList;
+import java.io.File;
 import java.util.List;
 
 public class ToolLoader {
 
-  public static final List<Tool> tools = new ArrayList<>();
+  public static final List<Tool> TOOLS = new UniqueArrayList<>();
+
+  static {
+    File toolsDir = new File("tools").getAbsoluteFile();
+    System.out.println("toolsDir = " + toolsDir);
+  }
 
   public static boolean addTool(Tool tool) {
     System.out.println("addTool: " + tool.getClass().getName());
-    return tools.add(tool);
+    return TOOLS.add(tool);
 
   }
 

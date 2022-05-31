@@ -14,12 +14,18 @@ public class Main {
           "io.github.usbharu.dtf.annotation.Author")) {
         System.out.println("classInfo = " + classInfo);
         Class.forName(classInfo.getName());
+        if (classInfo.getName().equals("io.github.usbharu.dtf.DuplicateLineRemover")) {
+//          System.out.println("classInfo = " + classInfo);
+          ToolLoader.use(ToolLoader.TOOLS.get(ToolLoader.TOOLS.size() - 1),
+              new String[] {"D:\\Documents\\test\\docker-compose.yml",
+                  "D:\\Documents\\test\\docker-compose.yml.save"});
+        }
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);
     }
-    System.out.println("ToolLoader.tools = " + ToolLoader.tools);
+    System.out.println("ToolLoader.tools = " + ToolLoader.TOOLS);
   }
 }
