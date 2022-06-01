@@ -1,6 +1,7 @@
 package io.github.usbharu.dtf.util;
 
 import com.sun.tools.javac.code.Flags;
+import com.sun.tools.javac.code.Symbol.MethodSymbol;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCBlock;
 import com.sun.tools.javac.tree.JCTree.JCClassDecl;
@@ -15,9 +16,12 @@ import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ASTUtils {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ASTUtils.class);
   private ASTUtils() {
   }
 
@@ -49,24 +53,40 @@ public class ASTUtils {
    * @return 見つかったメソッド。なければ {@code null}
    */
   public static JCMethodDecl searchMethod(JCClassDecl classDecl, String sym) {
+    LOGGER.debug("search method class: {} search symbol: {}", classDecl.name, sym);
     for (JCTree def : classDecl.defs) {
-      if (def instanceof JCMethodDecl && ((JCMethodDecl) def).sym.toString()
-          .equals(sym)) {
-        return ((JCMethodDecl) def);
+      LOGGER.trace("searching def: {}", def);
+      try {
+        if (def instanceof JCMethodDecl) {
+          MethodSymbol symbol = ((JCMethodDecl) def).sym;
+          LOGGER.trace("searching def type: {} returnType: {} params: {} tsym:{}", symbol.type,
+              symbol.getReturnType(), symbol.params, symbol.type.tsym);
+
+          if (symbol.toString().equals(sym)) {
+            LOGGER.debug("searched method: {}", sym);
+            return ((JCMethodDecl) def);
+          }
+        }
+      } catch (NullPointerException e) {
+        LOGGER.warn("not symbol", e);
       }
     }
+    LOGGER.debug("{} not found", sym);
     return null;
   }
 
   public static JCMethodDecl makeEmptyMethod(TreeMaker maker, Names names, JCClassDecl classDecl,
       String name) {
+    LOGGER.debug("make empty method: {}", name);
     JCMethodDecl jcMethodDecl = searchMethod(classDecl, name);
+//    System.out.println("jcMethodDecl = " + jcMethodDecl);
     if (jcMethodDecl == null) {
+      LOGGER.debug("make new empty method: {}", name);
       jcMethodDecl =
-          makeNoParamMethod(maker, names, maker.Modifiers(Flags.PUBLIC), symbolToName(name), "void",
+          makeNoParamMethod(maker, names, maker.Modifiers(Flags.PUBLIC + Flags.BAD_OVERRIDE),
+              symbolToName(name), "void",
               makeEmptyBlock(maker));
-      classDecl.defs = classDecl.defs.prepend(
-          jcMethodDecl);
+      classDecl.defs = classDecl.defs.prepend(jcMethodDecl);
     } else {
       jcMethodDecl.body = makeEmptyBlock(maker);
 
@@ -76,14 +96,22 @@ public class ASTUtils {
 
   public static JCMethodDecl makeLiteralReturnMethod(TreeMaker maker, Names names,
       JCClassDecl classDecl, String sym, String type, Object literal) {
+    LOGGER.debug("make literal return method");
     JCMethodDecl jcMethodDecl = searchMethod(classDecl, sym);
     if (jcMethodDecl == null) {
-      return makeNoParamMethod(maker, maker.Modifiers(Flags.PUBLIC),
-          names.fromString(symbolToName(sym)),
-          maker.Ident(names.fromString(type)), makeLiteralReturnBlock(maker, literal));
+      LOGGER.debug("make method: {}", sym);
+      JCMethodDecl jcMethodDecl1 = makeNoParamMethod(maker, maker.Modifiers(Flags.PUBLIC),
+          names.fromString(symbolToName(sym)), maker.Ident(names.fromString(type)),
+          makeLiteralReturnBlock(maker, literal));
+//      jcMethodDecl1.sym = new MethodSymbol(Flags.PUBLIC,names.fromString(symbolToName(sym)),
+//          new MethodType(List.nil(),maker.Ident(names.fromString("String")).type, List.nil(),null) ,classDecl.sym);
+//      System.out.println("jcMethodDecl1 = " + jcMethodDecl1);
+//      System.out.println("jcMethodDecl1.sym = " + jcMethodDecl1.sym.toString());
+      return jcMethodDecl1;
     }
     jcMethodDecl.restype = maker.Ident(names.fromString(type));
     jcMethodDecl.body = makeLiteralReturnBlock(maker, literal);
+//    jcMethodDecl.sym = new MethodSymbol(Flags.PUBLIC,names.fromString(symbolToName(sym)),maker.Ident(names.fromString("String")).type,classDecl.sym);
     return jcMethodDecl;
   }
 

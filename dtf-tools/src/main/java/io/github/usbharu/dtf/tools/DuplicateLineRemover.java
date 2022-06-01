@@ -1,4 +1,4 @@
-package io.github.usbharu.dtf;
+package io.github.usbharu.dtf.tools;
 
 import io.github.usbharu.dtf.annotation.Author;
 import io.github.usbharu.dtf.annotation.Tool;
@@ -19,7 +19,7 @@ public class DuplicateLineRemover extends AbstractTool {
 
   static boolean a = ToolLoader.addTool(new DuplicateLineRemover());
 
-  @Tool
+  @Tool()
   public Object[] remove(String path, String outputPath) {
     try (BufferedReader bufferedReader = new BufferedReader(
         new InputStreamReader(new FileInputStream(path)));

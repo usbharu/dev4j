@@ -26,11 +26,15 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("*")
 public class AnnotationProcessor extends AbstractProcessor {
+
+  private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
   private Trees trees;
   private Context context;
@@ -50,11 +54,16 @@ public class AnnotationProcessor extends AbstractProcessor {
 
   @Override
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+
     for (Element element : roundEnv.getElementsAnnotatedWith(Author.class)) {
+      System.out.println("element = " + element);
       generateGetAuthor(element);
+      System.out.println("element end = " + element);
     }
     for (Element element : roundEnv.getElementsAnnotatedWith(Tool.class)) {
+      System.out.println("element = " + element);
       generatePickup(element);
+      System.out.println("element end = " + element);
     }
     return false;
   }
@@ -64,33 +73,35 @@ public class AnnotationProcessor extends AbstractProcessor {
     JCTree clazz = elementUtils.getTree(enclosingElement);
     JCTree tree = elementUtils.getTree(element);
     JCMethodDecl jcMethodDecl = (JCMethodDecl) tree;
-    System.out.println("jcMethodDecl.body = " + jcMethodDecl.body);
     JCClassDecl jcClassDecl = (JCClassDecl) clazz;
     Tool tool = element.getAnnotation(Tool.class);
-    System.out.println("tool = " + tool);
     if (tool != null) {
 
       List<JCVariableDecl> arg = List.of(
-          maker.VarDef(maker.Modifiers(Flags.PARAMETER), names.fromString("arg"),
+          maker.VarDef(maker.Modifiers(Flags.PARAMETER + Flags.VarFlags), names.fromString("arg"),
               maker.TypeArray(maker.Ident(names.fromString("String"))), null));
-      System.out.println("arg = " + arg);
-      JCMethodDecl pickup =
-          ASTUtils.makeEmptyMethod(maker, names, jcClassDecl, "pickup(java.lang.String[])");
+//      System.out.println("arg = " + arg);
+      JCMethodDecl pickup = maker.MethodDef(maker.Modifiers(0), names.fromString("pickup"),
+          maker.TypeArray(maker.Ident(names.fromString("Object"))), List.nil(), arg, List.nil(),
+          null, null);
+//          ASTUtils.makeEmptyMethod(maker, names, jcClassDecl, "pickup(java.lang.String[])");
       List<JCStatement> statements = List.nil();
       List<JCVariableDecl> params = jcMethodDecl.params;
+      LOGGER.debug("generate params size: {}", params.size());
       for (int i = 0, paramsSize = params.size(); i < paramsSize; i++) {
         JCVariableDecl param = params.get(i);
         String s = literalToParseMethodName(param.vartype.toString());
-        System.out.println("s = " + s);
+//        System.out.println("s = " + s);
         List<JCExpression> args =
             List.of(maker.Indexed(maker.Ident(names.fromString("arg")), maker.Literal(i)));
-        JCExpressionStatement exec = maker.Exec(maker.Apply(null,maker.Select(maker.Ident(names.fromString(
-            primitiveToObject(param.vartype.toString()))),names.fromString(s)),args));
-        System.out.println("exec = " + exec);
+        JCExpressionStatement exec = maker.Exec(maker.Apply(null,
+            maker.Select(maker.Ident(names.fromString(primitiveToObject(param.vartype.toString()))),
+                names.fromString(s)), args));
+//        System.out.println("exec = " + exec);
         JCExpression expression = exec.getExpression();
-        System.out.println("expression = " + expression);
+//        System.out.println("expression = " + expression);
         JCVariableDecl jcVariableDecl =
-            maker.VarDef(maker.Modifiers(Flags.PARAMETER),
+            maker.VarDef(maker.Modifiers(Flags.LocalVarFlags),
                 names.fromString(param.name.toString()),
                 maker.Ident(names.fromString(primitiveToObject(param.vartype.toString()))),
                 expression);
@@ -98,19 +109,18 @@ public class AnnotationProcessor extends AbstractProcessor {
       }
       List<JCExpression> expressions = List.nil();
       for (JCVariableDecl param : params) {
-        expressions =
-            expressions.append(maker.Ident(names.fromString(param.name.toString())));
+        expressions = expressions.append(maker.Ident(names.fromString(param.name.toString())));
       }
       JCExpressionStatement exec =
           ASTUtils.exec(maker, names, jcMethodDecl.name.toString(), expressions);
-      statements =
-          statements.append(maker.Return(exec.getExpression()));
+      statements = statements.append(maker.Return(exec.getExpression()));
       pickup.body = maker.Block(0, statements);
       pickup.params = arg;
       pickup.restype = maker.TypeArray(maker.Ident(names.fromString("Object")));
-      System.out.println("pickup = " + pickup);
-      System.out.println("jcClassDecl = " + jcClassDecl);
+//      System.out.println("pickup = " + pickup);
+//      System.out.println("jcClassDecl = " + jcClassDecl);
     }
+    System.out.println("jcClassDecl = " + jcClassDecl);
   }
 
   private void generateGetAuthor(Element element) {
@@ -119,9 +129,11 @@ public class AnnotationProcessor extends AbstractProcessor {
     JCClassDecl jcClassDecl = (JCClassDecl) tree;
 
     if (annotation != null) {
+      System.out.println("generate get author");
       String author = annotation.value();
-      ASTUtils.makeLiteralReturnMethod(maker, names, jcClassDecl, "getAuthor()", "String",
-          author);
+      jcClassDecl.defs = jcClassDecl.defs.prepend(
+          ASTUtils.makeLiteralReturnMethod(maker, names, jcClassDecl, "getAuthor()", "String",
+              author));
       System.out.println("jcClassDecl = " + jcClassDecl);
     }
   }
