@@ -1,3 +1,5 @@
 rootProject.name = 'dtf'
 include 'dtf-aa'
 include 'dtf-core'
+include 'dtf-tools'
+
